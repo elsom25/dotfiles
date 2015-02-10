@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -z $1 ]
+then
+    port=":$1"
+else
+    port=""
+fi
+
+open http://$(docker-ip)$port/

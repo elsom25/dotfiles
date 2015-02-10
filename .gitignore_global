@@ -1,0 +1,18 @@
+# scm revert files
+**.orig
+
+# Mac finder artifacts
+.DS_Store
+
+# Netbeans project directory
+/nbproject/
+
+# RubyMine project files
+.idea
+
+# Sublime project files
+**.sublime-project
+**.sublime-workspace
+
+# vim artifacts
+**.swp

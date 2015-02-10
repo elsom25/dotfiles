@@ -1,0 +1,102 @@
+#
+# ini for git
+#
+
+[user]
+    name = "Jesse McGinnis"
+    email = "jessieelsom@hotmail.com"
+    logallrefupdates = true
+
+[advice]
+    statusHints = true
+
+[apply]
+    whitespace = strip
+
+[branch]
+    autosetupmerge = true
+    autosetuprebase = always
+
+[color]
+    ui = true
+
+[diff]
+    renames = true
+
+[core]
+    editor = vim
+    excludesfile = /opt/boxen/config/git/gitignore
+    autocrlf = input
+
+[merge]
+    tool = vimdiff
+
+[gc]
+    reflogexpire = 300
+    reflogexpireunreachable = 90
+
+[push]
+    default = tracking
+
+[rebase]
+    stat = true
+
+[rerere]
+    enabled = true
+    autoupdate = true
+
+[alias]
+    alias = !sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -
+    aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+
+    last = cat-file commit HEAD
+    cat = -p cat-file -p
+
+    st = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
+    sto = !git st -o
+
+    unstash = stash apply
+
+    df = diff
+    ds = diff --stat -r
+    cds = !git ds --cached
+    changes = "!git diff --name-status | sed -e 's/^/W /' ; git diff --cached --name-status | sed -e 's/^/C /'"
+
+    kill = branch -d
+
+    ci = commit
+    cia = commit -a
+    do = commit -am
+
+    co = checkout
+
+    cp = cherry-pick
+
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    lgn = "!f() { git log --graph --pretty=format:'%Cred%H%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --date=relative $@ | git name-rev --stdin --name-only ; } ; f"
+    log1 = log --pretty=oneline --abbrev-commit --decorate
+    standup = log --pretty=oneline --abbrev-commit --decorate --since yesterday --author Jesse
+
+    br = branch
+
+    undo = reset --hard
+    amend = commit --amend -C HEAD
+
+    prune-all = !git remote | xargs -n 1 git remote prune
+
+    whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+    whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+
+    debug = !GIT_PAGER= gdb --args git
+    edit-last-commit = !vim `git diff-tree -r --name-only HEAD HEAD~1`
+    edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+    add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+
+    k = !gitk
+
+
+[credential]
+helper = /opt/boxen/bin/boxen-git-credential
+
+[hub]
+protocol = https
