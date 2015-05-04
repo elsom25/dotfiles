@@ -25,7 +25,7 @@
 
 [core]
     editor = vim
-    excludesfile = /opt/boxen/config/git/gitignore
+    excludesfile = ~/.gitignore_global
     autocrlf = input
 
 [merge]
@@ -51,6 +51,8 @@
 
     last = cat-file commit HEAD
     cat = -p cat-file -p
+
+    deploy = "!f() { br=${2:-master}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
 
     st = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
     sto = !git st -o
