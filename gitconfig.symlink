@@ -59,6 +59,8 @@
 
     unstash = stash apply
 
+    pushf = push --force-with-lease
+
     df = diff
     ds = diff --stat -r
     cds = !git ds --cached

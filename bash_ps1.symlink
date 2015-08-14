@@ -6,7 +6,7 @@
 
 # create closure
 Ps1="";function ps1() {
-	
+
 	#######################################################
 	# Colour Constants
 	#######################################################
@@ -19,7 +19,7 @@ Ps1="";function ps1() {
 	declare -r local FG_PURPLE='35'
 	declare -r local FG_CYAN='36'
 	declare -r local FG_WHITE='37'
-	
+
 	declare -r local BG_NULL='00'
 	declare -r local BG_BLACK='40'
 	declare -r local BG_RED='41'
@@ -29,7 +29,7 @@ Ps1="";function ps1() {
 	declare -r local BG_PURPLE='45'
 	declare -r local BG_CYAN='46'
 	declare -r local BG_WHITE='47'
-	
+
 	#######################################################
 	# Effect Constants
 	#######################################################
@@ -39,14 +39,14 @@ Ps1="";function ps1() {
 	declare -r local BLINK='5'
 	declare -r local INVERT='7'
 	declare -r local HIDDEN='8'
-	
+
 	#######################################################
 	# ANSI Escape Commands
 	#######################################################
 	declare -r local ESC='\033'
 	declare -r local NORMAL="\[$ESC[m\]"
 	declare -r local RESET="\[$ESC[${DULL};${FG_WHITE};${BG_NULL}m\]"
-	
+
 	#######################################################
 	# setColour()
 	# Makes the output a certain colour
@@ -61,13 +61,13 @@ Ps1="";function ps1() {
 		local effect="${2}"
 		local foreground="${3}"
 		local background="${3}"
-		
+
 		local colour="\[${ESC}[${effect};${foreground};${background}m\]"
-		
+
 		#return
 		echo "${colour}${argument}${NORMAL}"; return $?
 	}
-	
+
 	#######################################################
 	# Shortcuts
 	# Quick access functions for specific colours
@@ -82,7 +82,7 @@ Ps1="";function ps1() {
 	function purple() 		{ echo "$(setColour "$1" ${DULL} ${FG_PURPLE} ${BG_NULL})"; return $?; }
 	function cyan() 		{ echo "$(setColour "$1" ${DULL} ${FG_CYAN} ${BG_NULL})"; return $?; }
 	function lightGray() 	{ echo "$(setColour "$1" ${DULL} ${FG_WHITE} ${BG_NULL})"; return $?; }
-	
+
 	function darkGray()		{ echo "$(setColour "$1" ${BRIGHT} ${FG_BLACK} ${BG_NULL})"; return $?; }
 	function brightRed()	{ echo "$(setColour "$1" ${BRIGHT} ${FG_RED} ${BG_NULL})"; return $?; }
 	function brightGreen() 	{ echo "$(setColour "$1" ${BRIGHT} ${FG_GREEN} ${BG_NULL})"; return $?; }
@@ -91,7 +91,7 @@ Ps1="";function ps1() {
 	function brightPurple() { echo "$(setColour "$1" ${BRIGHT} ${FG_PURPLE} ${BG_NULL}})"; return $?; }
 	function brightCyan() 	{ echo "$(setColour "$1" ${BRIGHT} ${FG_CYAN} ${BG_NULL})"; return $?; }
 	function white() 		{ echo "$(setColour "$1" ${BRIGHT} ${FG_WHITE} ${BG_NULL})"; return $?; }
-	
+
 	function invertBlack() 	{ echo "$(setColour "$1" ${INVERT} ${FG_BLACK} ${BG_NULL})"; return $?; }
 	function invertRed()	{ echo "$(setColour "$1" ${INVERT} ${FG_RED} ${BG_NULL})"; return $?; }
 	function invertGreen() 	{ echo "$(setColour "$1" ${INVERT} ${FG_GREEN} ${BG_NULL})"; return $?; }
@@ -104,13 +104,13 @@ Ps1="";function ps1() {
 	#######################################################
 	# Define Prompt
 	#######################################################
-	
+
 	# characters
 	local LB="$(darkGray \[)"
 	local RB="$(darkGray \])"
 	local AT="$(darkGray \@)"
 	local DS="$(white "\\\$")"
-	
+
 	# general info
 	local General_Path="$(green "\w")"
 	local General_History="$(darkGray "${SHLVL}:\!")"
@@ -118,22 +118,29 @@ Ps1="";function ps1() {
 	local __general_date_full="$(date +%F)"
 	local __general_date_namedDay="$(date +%a)"
 	local General_Date="$(purple "$__general_date_namedDay")"
-	
+
 	# current folder info
 	local __cur_numFiles="\$(/bin/ls -1 | wc -l | sed 's: ::g')"
 	local CurFolder_NumFiles="$(brightBlue "$__cur_numFiles files")"
 	local __cur_size="\$(/bin/ls -lah | grep -m 1 total | sed 's/total //')"
 	local CurFolder_Size="$(brown "${__cur_size}b")"
 
-	# current git branch	
+	# current ruby version
+	# how to make update?!
+	local RubyVer="$(red "${ruby_version}")"
+	local RubyLB="$(darkGray "[")"
+	local RubyRB="$(darkGray "]")"
+	local CurRubyVer="\$(if [ \"${ruby_version}\" = \"system\" ]; then echo \"\"; else echo \"${RubyLB}${ruby_version}${RubyRB} \"; fi)"
+
+	# current git branch
 	local __branch="\$(__git_ps1 "%s")" || ""
 	local GitBranch="$(lightGray "${__branch}")"
 	local __git_lb="\$(__git_ps1 "[")" || ""
 	local GitLB="$(darkGray "${__git_lb}")"
 	local __git_rb="\$(__git_ps1 "]")" || ""
-	local GitRB="$(darkGray "${__git_rb}")"	
+	local GitRB="$(darkGray "${__git_rb}")"
 	local CurGitBranch="${GitLB}${GitBranch}${GitRB}"
-	
+
 	# user
 	local __user_normalName="$(brown "\u")"
 	local __user_rootName="$(red "\u")"
@@ -148,7 +155,7 @@ Ps1="";function ps1() {
 	local __fun_pass="$(brightGreen \+)"
 	local __fun_fail="$(brightRed \-)"
 	local Fun_Smiley="\$(if [ \${pc_isValid} = 0 ]; then echo \"${__fun_pass}\"; else echo \"${__fun_fail}\"; fi)"
-		
+
 	#return
 	Ps1="\n${LB}${User_Full}${RB} ${General_Date} ${General_Time} ${LB}${CurFolder_NumFiles}${RB} ${General_Path} ${CurGitBranch}\n${LB}${General_History}${RB}${Fun_Limbo}${Fun_Smiley}${DS} ${RESET}"
 	return $?
@@ -161,6 +168,7 @@ Ps1="";function ps1() {
 
 function promptCommand() {
 	let pc_isValid=${?}
+	ruby_version="$(rbenv version-name)"
 	return $pc_isValid
 }; PROMPT_COMMAND=promptCommand;
 
