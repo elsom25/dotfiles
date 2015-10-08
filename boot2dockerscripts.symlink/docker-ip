@@ -1,7 +1,0 @@
-#!/bin/bash
-
-docker-ip() {
-  boot2docker ip 2> /dev/null
-}
-
-docker-ip
