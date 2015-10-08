@@ -4,7 +4,7 @@
 
 [user]
     name = "Jesse McGinnis"
-    email = "jessieelsom@hotmail.com"
+    email = "jesse@jcmcginnis.com"
     logallrefupdates = true
 
 [advice]
@@ -54,8 +54,11 @@
 
     deploy = "!f() { br=${2:-master}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
 
-    st = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
-    sto = !git st -o
+    ghmerge = "!f() { if [ -z "$1" ]; then echo "branch must be provided"; exit 1; fi; git co $1 && git pull origin $1 && git co master && git pull origin master && git merge $1 && git push origin master && git push origin :$1 && git br -d $1; } ; f"
+
+    stat = status
+    sst = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
+    st = !git sst -o
 
     unstash = stash apply
 

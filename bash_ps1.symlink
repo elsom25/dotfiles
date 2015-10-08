@@ -126,11 +126,10 @@ Ps1="";function ps1() {
 	local CurFolder_Size="$(brown "${__cur_size}b")"
 
 	# current ruby version
-	# how to make update?!
-	local RubyVer="$(red "${ruby_version}")"
-	local RubyLB="$(darkGray "[")"
-	local RubyRB="$(darkGray "]")"
-	local CurRubyVer="\$(if [ \"${ruby_version}\" = \"system\" ]; then echo \"\"; else echo \"${RubyLB}${ruby_version}${RubyRB} \"; fi)"
+	# local RubyVer="$(red "$(ruby_version)")"
+	# local RubyLB="$(darkGray "[")"
+	# local RubyRB="$(darkGray "]")"
+	# local CurRubyVer="\$(if [ \"$(ruby_version)\" = \"system\" ]; then echo \"\"; else echo \"${RubyLB}${RubyVer}${RubyRB} \"; fi)"
 
 	# current git branch
 	local __branch="\$(__git_ps1 "%s")" || ""
@@ -166,10 +165,21 @@ Ps1="";function ps1() {
 # For various dynamic values
 ###########################################################
 
+function ruby_version() {
+	if which rbenv &> /dev/null; then
+		rbenv version-name
+	elif which rvm-prompt &> /dev/null; then
+		rvm-prompt i v g
+	fi
+}
+# preferred if there's a way to do this in bash:
+# update a local variable `ruby_version` instead of calling a function on each prompt
+# chpwd_functions += (_update_ruby_version)
+
 function promptCommand() {
 	let pc_isValid=${?}
-	ruby_version="$(rbenv version-name)"
 	return $pc_isValid
 }; PROMPT_COMMAND=promptCommand;
+
 
 ps1;PS1="$Ps1"
