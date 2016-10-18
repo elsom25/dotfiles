@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/jessemcginnis/.oh-my-zsh
@@ -84,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 # Aliases
 alias zshconfig="subl ~/.zshrc"
 alias ohmyzsh="subl ~/.oh-my-zsh"
+alias strap="bash ~/bin/strap.sh"
 
 # Ruby
 source /usr/local/opt/chruby/share/chruby/chruby.sh
