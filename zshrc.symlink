@@ -87,9 +87,5 @@ alias zshconfig="subl ~/.zshrc"
 alias ohmyzsh="subl ~/.oh-my-zsh"
 alias strap="bash ~/bin/strap.sh"
 
-# Ruby
-source /usr/local/opt/chruby/share/chruby/chruby.sh
-source /usr/local/opt/chruby/share/chruby/auto.sh
-
 # Shopify Dev
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
