@@ -55,7 +55,7 @@
     deploy = "!f() { br=${2:-master}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
 
     ghmerge = "!f() { if [ -z "$1" ]; then echo "branch must be provided"; exit 1; fi; git co $1 && git pull origin $1 && git co master && git pull origin master && git merge $1 && git push origin master && git push origin :$1 && git br -d $1; } ; f"
-    done = "!f() { br=${1:-develop}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git pull && git br -d $cur_br && git tidy; }; f"
+    done = "!f() { br=${1:-master}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git pull && git br -d $cur_br && git tidy; }; f"
 
     stat = status
     sst = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
