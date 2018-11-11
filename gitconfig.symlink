@@ -3,8 +3,8 @@
 #
 
 [user]
-    name = "Jesse McGinnis"
-    email = "jesse@jcmcginnis.com"
+    name = Jesse McGinnis
+    email = accounts@jcmcginnis.com
     logallrefupdates = true
 
 [advice]
@@ -27,9 +27,11 @@
     editor = vim
     excludesfile = ~/.gitignore_global
     autocrlf = input
+    commitGraph = true
 
 [merge]
     tool = vimdiff
+    conflictstyle = diff3
 
 [gc]
     reflogexpire = 300
@@ -40,6 +42,7 @@
 
 [rebase]
     stat = true
+    autoStash = true
 
 [rerere]
     enabled = true
@@ -54,14 +57,16 @@
 
     deploy = "!f() { br=${2:-master}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
 
+    unfuck = "!f() { br=${1:-origin/master}; git rebase $br --exec 'git commit --amend --no-edit --reset-author'; }; f"
+
     ghmerge = "!f() { if [ -z "$1" ]; then echo "branch must be provided"; exit 1; fi; git co $1 && git pull origin $1 && git co master && git pull origin master && git merge $1 && git push origin master && git push origin :$1 && git br -d $1; } ; f"
-    done = "!f() { br=${1:-master}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git pull && git br -d $cur_br && git tidy; }; f"
+    done = "!f() { br=${1:-master}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git prune-all && git pull && git br -d $cur_br && git tidy; }; f"
 
     stat = status
     sst = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
     st = !git sst -o
 
-    unstash = stash apply
+    unstash = stash pop
 
     pushf = push --force-with-lease
 
@@ -70,7 +75,7 @@
     cds = !git ds --cached
     changes = "!git diff --name-status | sed -e 's/^/W /' ; git diff --cached --name-status | sed -e 's/^/C /'"
 
-    kill = branch -d
+    kill = branch -D
 
     ci = commit
     cia = commit -a
@@ -103,11 +108,14 @@
 
     k = !gitk
 
-
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 
 [hub]
-protocol = https
+    protocol = https
+
 [github]
-	user = elsom25
+    user = elsom25
+
+[pager]
+    branch = false

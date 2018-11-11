@@ -91,3 +91,4 @@ alias ffs="dev down && dev up && dev server"
 # Shopify Dev
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
 export PATH="$HOME/.yarn/bin:$PATH"
+export GOPATH=$HOME
