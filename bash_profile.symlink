@@ -61,3 +61,4 @@ export PATH="/Users/jesse/bin:$PATH"
 
 # boxen
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+if [ -e /Users/jessemcginnis/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/jessemcginnis/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
