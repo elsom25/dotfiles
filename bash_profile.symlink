@@ -41,6 +41,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+
 # enable git completion
 if [ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ]; then
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
@@ -53,12 +54,9 @@ fi
 # tries to load a local copy of .ps1
 [ -f ~/.bash_ps1 ] && source ~/.bash_ps1
 
-# Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
 # User bin
 export PATH="/Users/jesse/bin:$PATH"
 
 # boxen
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
-if [ -e /Users/jessemcginnis/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/jessemcginnis/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

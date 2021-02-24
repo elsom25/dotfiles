@@ -3,7 +3,7 @@
 export PATH=$HOME/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jessemcginnis/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -97,5 +97,4 @@ alias ffs="dev down && dev up && dev server"
 
 # Shopify Dev
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
-export PATH="$HOME/.yarn/bin:$PATH"
-export GOPATH=$HOME
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
