@@ -4,7 +4,7 @@
 # delete symlinked files
 
 DOTFILES_ROOT="`pwd`"
-source "${DOTFILES_ROOT}/base/common.sh"
+source "${DOTFILES_ROOT}/script/base/common.sh"
 
 delete_all() {
   for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
