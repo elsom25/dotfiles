@@ -57,6 +57,7 @@ plugins=(
   git
   ruby
   rails
+  nvm
   brew
   zsh-autosuggestions
   thefuck
@@ -97,7 +98,16 @@ alias ohmyzsh="code ~/.oh-my-zsh"
 alias strap="bash ~/bin/strap.sh"
 alias ffs="dev down && dev up && dev server"
 
-# Shopify Dev
-[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+# (Shopify) Dev
+[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+[[ -f $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 () {
+  source $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh;
+  source /usr/local/share/chruby/auto.sh;
+  chruby "$@";
+}
 [[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
