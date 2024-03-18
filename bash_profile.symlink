@@ -59,4 +59,7 @@ export PATH="/Users/jesse/bin:$PATH"
 
 # boxen
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+
+# shopify dev
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [[ -f /opt/dev/dev.sh ]]; then source /opt/dev/dev.sh; fi

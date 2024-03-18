@@ -22,14 +22,12 @@
 
 [diff]
     renames = true
-	algorithm = patience
 	noprefix = true
 
 [core]
     editor = vim
     excludesfile = ~/.gitignore_global
     autocrlf = input
-    commitGraph = true
 
 [merge]
     tool = vimdiff
@@ -38,7 +36,6 @@
 [gc]
     reflogexpire = 300
     reflogexpireunreachable = 90
-	writeCommitGraph = true
 
 [push]
     default = tracking
@@ -58,12 +55,12 @@
     last = cat-file commit HEAD
     cat = -p cat-file -p
 
-    deploy = "!f() { br=${2:-master}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
+    deploy = "!f() { br=${2:-main}; git push $1 `git subtree split --prefix build $br`:$br --force ; } ; f"
 
-    unfuck = "!f() { br=${1:-origin/master}; git rebase $br --exec 'git commit --amend --no-edit --reset-author'; }; f"
+    unfuck = "!f() { br=${1:-origin/main}; git rebase $br --exec 'git commit --amend --no-edit --reset-author'; }; f"
 
-    ghmerge = "!f() { if [ -z "$1" ]; then echo "branch must be provided"; exit 1; fi; git co $1 && git pull origin $1 && git co master && git pull origin master && git merge $1 && git push origin master && git push origin :$1 && git br -d $1; } ; f"
-    done = "!f() { br=${1:-master}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git prune-all && git pull && git br -d $cur_br && git tidy; }; f"
+    ghmerge = "!f() { if [ -z "$1" ]; then echo "branch must be provided"; exit 1; fi; git co $1 && git pull origin $1 && git co main && git pull origin main && git merge $1 && git push origin main && git push origin :$1 && git br -d $1; } ; f"
+    done = "!f() { br=${1:-main}; cur_br=`git symbolic-ref --short HEAD`; git co $br && git prune-all && git pull && git br -d $cur_br && git tidy; }; f"
 
     stat = status
     sst = "!f() { git ls-files --exclude-standard -t -u -s -m -d $@ | sed -e 's/C.*\t/C /' ; } ; f"
@@ -118,14 +115,11 @@
 
 [pager]
     branch = false
-[protocol]
-	version = 2
-[url "https://github.com/Shopify/"]
-	insteadOf = git@github.com:Shopify/
-	insteadOf = git@github.com:shopify/
-	insteadOf = ssh://git@github.com/Shopify/
-	insteadOf = ssh://git@github.com/shopify/
-[credential]
-	helper = store --file /opt/dev/var/private/git_credential_store
 [pull]
 	rebase = true
+[include]
+	path = $HOME/.config/dev/gitconfig
+[init]
+	defaultBranch = main
+[credential]
+	helper = store --file /opt/dev/var/private/git_credential_store
