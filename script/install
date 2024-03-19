@@ -9,6 +9,17 @@ source "${DOTFILES_ROOT}/script/base/uninstall.sh"
 
 set -e
 
+install_antigen() {
+  # Install the antigen plugin/theme manager if it's not already installed.
+  if [[ ! -d $HOME/antigen ]]; then
+    echo -e "Antigen not found, installing..."
+    mkdir -p $HOME/src/zsh
+    cd $HOME/src/zsh
+    git clone https://github.com/zsh-users/antigen.git
+    cd -
+  fi
+}
+
 install_dotfiles() {
   info 'installing dotfiles'
   for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
@@ -20,6 +31,7 @@ install_dotfiles() {
 
 echo ''
 delete_all
+install_antigen
 install_dotfiles
 echo ''
 echo '  Installed!'
