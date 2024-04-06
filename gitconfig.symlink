@@ -107,6 +107,7 @@
     add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 
     k = !gitk
+
 [hub]
     protocol = https
 
@@ -115,11 +116,15 @@
 
 [pager]
     branch = false
+
 [pull]
 	rebase = true
+
 [include]
 	path = $HOME/.config/dev/gitconfig
+
 [init]
 	defaultBranch = main
+
 [credential]
 	helper = store --file /opt/dev/var/private/git_credential_store

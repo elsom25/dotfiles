@@ -8,7 +8,14 @@ export PATH=$HOME/bin:$PATH
 HIST_STAMPS="yyyy-mm-dd"
 
 # Antigen + ZSH Configuration
-source $HOME/src/zsh/antigen/antigen.zsh
+if [[ -f $HOME/src/zsh/antigen/antigen.zsh ]]; then
+  source $HOME/src/zsh/antigen/antigen.zsh
+elif [[ -f $HOME/.dotfiles/antigen.zsh ]]; then
+  source $HOME/.dotfiles/antigen.zsh
+else
+  echo "Antigen not found"
+  return
+fi
 
 antigen use oh-my-zsh
 
@@ -29,7 +36,18 @@ antigen theme spaceship-prompt/spaceship-prompt
 
 antigen apply
 
+#
 # User configuration
+
+# Homebrew
+[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
+
+# chruby
+if [[ -f /opt/dev/sh/chruby/chruby.sh ]]; then
+  type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+elif [[ -f $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh ]]; then
+  type chruby >/dev/null 2>&1 || chruby () { source $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh; chruby "$@"; }
+fi
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -38,16 +56,11 @@ else
   export EDITOR='code'
 fi
 
-# Aliases
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
-alias strap="bash ~/bin/strap.sh"
+alias ffs="dev down && dev up && dev server" # Shopify
 
-# thefuck
 eval $(thefuck --alias)
 
-# Shopify Dev
-alias ffs="dev down && dev up && dev server"
-[[ -f /opt/dev/sh/chruby/chruby.sh ]] && { type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; } }
-[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
+# Shopify
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
