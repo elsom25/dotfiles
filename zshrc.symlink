@@ -7,16 +7,26 @@ export PATH=$HOME/bin:$PATH
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="yyyy-mm-dd"
 
-# Antigen + ZSH Configuration
-if [[ -f $HOME/src/zsh/antigen/antigen.zsh ]]; then
-  source $HOME/src/zsh/antigen/antigen.zsh
-elif [[ -f $HOME/.dotfiles/antigen.zsh ]]; then
-  source $HOME/.dotfiles/antigen.zsh
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
 else
-  echo "Antigen not found"
-  return
+  export EDITOR='code'
 fi
 
+alias zshconfig="$EDITOR ~/.zshrc"
+alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
+
+# Antigen for ZSH Configuration
+ANTIGEN_PATH=$HOME/src/zsh/antigen
+if [[ ! -f $ANTIGEN_PATH/antigen.zsh ]]; then
+  echo "Antigen not found. Downloading..."
+  mkdir -p $ANTIGEN_PATH
+  curl -L git.io/antigen > $ANTIGEN_PATH/antigen.zsh
+fi
+source $ANTIGEN_PATH/antigen.zsh
+
+# ZSH Configuration
 antigen use oh-my-zsh
 
 antigen bundle git
@@ -40,25 +50,25 @@ antigen apply
 # User configuration
 
 # Homebrew
-[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
+if [[ $(command -v brew) == "" ]]; then
+  echo "Installing Hombrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+BREW_CMD="$(command -v brew)"
+[[ -x $BREW_CMD ]] && eval $($BREW_CMD shellenv)
 
 # chruby
-if [[ -f /opt/dev/sh/chruby/chruby.sh ]]; then
-  type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
-elif [[ -f $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh ]]; then
-  type chruby >/dev/null 2>&1 || chruby () { source $HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh; chruby "$@"; }
-fi
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+if [[ -d /opt/dev/sh/chruby ]]; then
+  CHRUBY_PATH=/opt/dev/sh/chruby
+elif [[ -d $HOMEBREW_PREFIX/opt/chruby/share/chruby ]]; then
+  CHRUBY_PATH=$HOMEBREW_PREFIX/opt/chruby/share/chruby
 else
-  export EDITOR='code'
+  echo "chruby not found. Installing..."
+  brew install chruby
+  CHRUBY_PATH=$HOMEBREW_PREFIX/opt/chruby/share/chruby
 fi
-
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
-alias ffs="dev down && dev up && dev server" # Shopify
+source $CHRUBY_PATH/chruby.sh
+source $CHRUBY_PATH/auto.sh
 
 eval $(thefuck --alias)
 
