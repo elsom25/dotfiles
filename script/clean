@@ -5,11 +5,9 @@
 
 DOTFILES_ROOT="`pwd`"
 source "${DOTFILES_ROOT}/script/base/common.sh"
-source "${DOTFILES_ROOT}/script/base/uninstall.sh"
 
-set -e
+set -euo pipefail
 
-echo ''
-delete_all
-echo ''
-echo '  Cleaned!'
+echo
+echo "Delete dotfiles..."
+delete_dotfiles "$DOTFILES_ROOT"

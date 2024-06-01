@@ -3,35 +3,62 @@
 #
 # install without user input
 
-DOTFILES_ROOT="`pwd`"
+DOTFILES_ROOT="$(pwd)"
 source "${DOTFILES_ROOT}/script/base/common.sh"
-source "${DOTFILES_ROOT}/script/base/uninstall.sh"
 
-set -e
+set -euo pipefail
 
 install_antigen() {
-  # Install the antigen plugin/theme manager if it's not already installed.
-  if [[ ! -d $HOME/antigen ]]; then
-    echo -e "Antigen not found, installing..."
-    mkdir -p $HOME/src/zsh
-    cd $HOME/src/zsh
-    git clone https://github.com/zsh-users/antigen.git
-    cd -
+  ANTIGEN_PATH="$HOME/src/zsh/antigen"
+  if [[ -f "$ANTIGEN_PATH/antigen.zsh" ]]; then
+    success "Antigen found at $ANTIGEN_PATH"
+  else
+    mkdir -p "$ANTIGEN_PATH"
+    curl -L git.io/antigen > "$ANTIGEN_PATH/antigen.zsh"
+    added "Antigen installed at $ANTIGEN_PATH"
   fi
 }
 
-install_dotfiles() {
-  info 'installing dotfiles'
-  for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
-  do
-    dest="$HOME/.`basename \"${source%.*}\"`"
-    link_file $source $dest
-  done
+install_homebrew() {
+  if command -v brew > /dev/null 2>&1; then
+    success "Homebrew found at $(which brew)"
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    added "Homebrew installed at $(which brew)"
+  fi
 }
 
-echo ''
-delete_all
+install_chruby() {
+  HOMEBREW_PREFIX=$(brew --prefix)
+  if [[ -d /opt/dev/sh/chruby ]]; then
+    CHRUBY_PATH=/opt/dev/sh/chruby
+    success "chruby found at $CHRUBY_PATH"
+  elif [[ -d "$HOMEBREW_PREFIX/opt/chruby/share/chruby" ]]; then
+    CHRUBY_PATH="$HOMEBREW_PREFIX/opt/chruby/share/chruby"
+    success "chruby found at $CHRUBY_PATH"
+  else
+    brew install chruby
+    CHRUBY_PATH="$HOMEBREW_PREFIX/opt/chruby/share/chruby"
+    added "chruby installed at $CHRUBY_PATH"
+  fi
+}
+
+install_thefuck() {
+    if command -v thefuck > /dev/null 2>&1; then
+    success "thefuck found at $(which thefuck)"
+  else
+    brew install thefuck
+    added "thefuck found at $(which thefuck)"
+  fi
+}
+
+echo
+echo "Setup dependencies..."
 install_antigen
-install_dotfiles
-echo ''
-echo '  Installed!'
+install_homebrew
+install_chruby
+install_thefuck
+
+echo
+echo "Setup dotfiles..."
+install_dotfiles "$DOTFILES_ROOT"
