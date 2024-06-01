@@ -4,7 +4,7 @@
 # install without user input
 
 DOTFILES_ROOT="$(pwd)"
-source "${DOTFILES_ROOT}/script/base/common.sh"
+source "${DOTFILES_ROOT}/script/common.sh"
 
 set -euo pipefail
 
@@ -48,7 +48,16 @@ install_thefuck() {
     success "thefuck found at $(which thefuck)"
   else
     brew install thefuck
-    added "thefuck found at $(which thefuck)"
+    added "thefuck installed at $(which thefuck)"
+  fi
+}
+
+install_starship() {
+    if command -v starship > /dev/null 2>&1; then
+    success "starship found at $(which starship)"
+  else
+    curl -sS https://starship.rs/install.sh | sh
+    added "starship installed at $(which starship)"
   fi
 }
 
@@ -58,6 +67,7 @@ install_antigen
 install_homebrew
 install_chruby
 install_thefuck
+install_starship
 
 echo
 echo "Setup dotfiles..."

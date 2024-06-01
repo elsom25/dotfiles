@@ -3,8 +3,8 @@
 #
 # install without user input
 
-DOTFILES_ROOT="`pwd`"
-source "${DOTFILES_ROOT}/script/base/common.sh"
+DOTFILES_ROOT="$(pwd)"
+source "${DOTFILES_ROOT}/script/common.sh"
 
 set -euo pipefail
 
