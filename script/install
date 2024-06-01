@@ -44,7 +44,7 @@ install_chruby() {
 }
 
 install_thefuck() {
-    if command -v thefuck > /dev/null 2>&1; then
+  if command -v thefuck > /dev/null 2>&1; then
     success "thefuck found at $(which thefuck)"
   else
     brew install thefuck
@@ -53,11 +53,29 @@ install_thefuck() {
 }
 
 install_starship() {
-    if command -v starship > /dev/null 2>&1; then
+  if command -v starship > /dev/null 2>&1; then
     success "starship found at $(which starship)"
   else
     curl -sS https://starship.rs/install.sh | sh
     added "starship installed at $(which starship)"
+  fi
+}
+
+download_fonts() {
+  local FONT_DIR="$HOME/Library/Fonts"
+  local FONT_NAME="Monaspice"
+  local FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Monaspace.zip"
+
+  # Only do this for OSX
+  if [[ -d "$FONT_DIR" ]]; then
+    if ls "$FONT_DIR" | grep -q "$FONT_NAME"; then
+      success "$FONT_NAME font found at $FONT_DIR"
+    else
+      curl -L "$FONT_URL" -o "$FONT_DIR/$FONT_NAME.zip"
+      unzip -o "${FONT_DIR}/${FONT_NAME}.zip" -d "$FONT_DIR"
+      rm "${FONT_DIR}/${FONT_NAME}.zip" "${FONT_DIR}/LICENSE" "${FONT_DIR}/README.md"
+      added "$FONT_NAME font downloaded to $FONT_DIR"
+    fi
   fi
 }
 
@@ -68,6 +86,7 @@ install_homebrew
 install_chruby
 install_thefuck
 install_starship
+download_fonts
 
 echo
 echo "Setup dotfiles..."
