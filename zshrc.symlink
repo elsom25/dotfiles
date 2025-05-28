@@ -14,9 +14,6 @@ else
   export EDITOR='code'
 fi
 
-alias zshconfig="$EDITOR ~/.zshrc"
-alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
-
 # Antigen for ZSH Configuration
 ANTIGEN_PATH="$HOME/src/zsh/antigen/antigen.zsh"
 if [[ -f "$ANTIGEN_PATH" ]]; then
@@ -35,25 +32,12 @@ else
   exit 1
 fi
 
-# chruby configuration
-HOMEBREW_PREFIX=$(brew --prefix)
-if [[ -d /opt/dev/sh/chruby ]]; then
-  CHRUBY_PATH="/opt/dev/sh/chruby"
-elif [[ -d "$HOMEBREW_PREFIX/opt/chruby/share/chruby" ]]; then
-  CHRUBY_PATH="$HOMEBREW_PREFIX/opt/chruby/share/chruby"
+# mise
+if command -v mise > /dev/null 2>&1; then
+  eval "$(mise activate bash)"
 else
-  echo "chruby not found. Please run the install script."
+  echo "mise not found. Please run the install script."
   exit 1
-fi
-
-if [[ -d "$CHRUBY_PATH" ]]; then
-  source "$CHRUBY_PATH/chruby.sh"
-  source "$CHRUBY_PATH/auto.sh"
-fi
-
-# Shopify
-if [[ -f /opt/dev/dev.sh ]]; then
-  source /opt/dev/dev.sh
 fi
 
 # Starship proompt
@@ -64,3 +48,14 @@ if command -v starship > /dev/null 2>&1; then
 else
   echo "starship not found. Please run the install script."
 fi
+
+# Shopify
+[ -s /opt/dev/dev.sh ] && source /opt/dev/dev.sh
+
+# bun
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun" # bun completions
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# dev // GrowthLoop
+[ -s "$HOME/.dev/hack/zshrc.sh" ] && source "$HOME/.dev/hack/zshrc.sh"
