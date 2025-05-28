@@ -40,6 +40,15 @@ else
   exit 1
 fi
 
+# Starship proompt
+# https://starship.rs/
+if command -v starship > /dev/null 2>&1; then
+  export STARSHIP_CONFIG=~/.starship.toml
+  eval "$(starship init zsh)"
+else
+  echo "starship not found. Please run the install script."
+fi
+
 # Shopify
 [ -s /opt/dev/dev.sh ] && source /opt/dev/dev.sh
 
